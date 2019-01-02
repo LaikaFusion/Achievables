@@ -4,12 +4,17 @@ require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const db = require("../database/dbConfig");
 const { sign } = require("jsonwebtoken");
+const passport = require("passport");
 
 const { SECRET } = process.env;
 
-router.get("/", (req, res) => {
-  db("users").then(users => res.json(users));
-});
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    db("users").then(users => res.json(users));
+  }
+);
 
 router.post("/register", (req, res) => {
   const { name, email, password } = req.body;
