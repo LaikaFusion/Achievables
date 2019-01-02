@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-const url = process.env.REACT_APP_API_URL;
+// const url = process.env.REACT_APP_API_URL;
 
 const initialUser = {
-    username: '',
+    name: '',
+    email: '',
     password: ''
 }
 
@@ -24,7 +25,7 @@ class Register extends Component {
     submitHandler = (event) => {
         event.preventDefault();
         axios
-            .post(`${url}/api/register`, this.state.user)
+            .post(`http://localhost:3333/api/users/register`, this.state.user)
             .then(response => {
                 if (response.status === 201) {
                     this.setState({
@@ -47,12 +48,21 @@ class Register extends Component {
         return (
             <section>
                 <form onSubmit={this.submitHandler}>
-                    <label htmlFor='username'>Username</label>
+                    <label htmlFor='name'>name</label>
                     <input
                         type='text'
-                        id='username'
-                        name='username'
-                        value={this.state.user.username}
+                        id='name'
+                        name='name'
+                        value={this.state.user.name}
+                        onChange={this.inputHandler}
+                    />
+
+                    <label htmlFor='email'>Email</label>
+                    <input
+                        type='text'
+                        id='email'
+                        name='email'
+                        value={this.state.user.email}
                         onChange={this.inputHandler}
                     />
 

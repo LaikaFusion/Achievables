@@ -5,7 +5,7 @@ import Register from './Register'
 import Login from './Login';
 import { withRouter, NavLink, Switch, Route } from 'react-router-dom';
 
-const url = process.env.REACT_APP_API_URL;
+// const url = process.env.REACT_APP_API_URL;
 
 class Authentication extends Component {
     constructor(props) {
@@ -20,12 +20,13 @@ class Authentication extends Component {
         const token = localStorage.getItem('secret_token');
         const options = {
             headers: {
-                authentication: token
+                // authentication: token
+                Authorization: token 
             }
         }
 
         if (token) {
-            axios.get(`${url}/api/users`, options)
+            axios.get(`http://localhost:3333/api/users`, options)
                 .then(response => {
                     if (response.status === 200 && response.data) {
                         this.setState({ loggedIn: true, users: response.data });
@@ -67,13 +68,13 @@ class Authentication extends Component {
                 <section>
                     <Switch>
                         <Route path="/register" component={Register} />
-                        <Route path="/login" component={Login} />
+                        <Route path="/login" render={props => <Login {...props}/>}/>
                         <Route path="/" render={() => {
                             return (
                                 <React.Fragment>
                                     <h1>Users</h1>
                                     <div>
-                                        {this.state.users.map(user => <p key={user.id}>{user.username}</p>)}
+                                        {this.state.users.map(user => <p key={user.id}>{user.name}</p>)}
                                     </div>
                                 </React.Fragment>
                             )

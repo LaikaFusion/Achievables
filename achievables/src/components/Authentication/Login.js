@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-const url = process.env.REACT_APP_API_URL;
+// const url = process.env.REACT_APP_API_URL;
 
 const initialUser = {
-    username: '',
+    email: '',
     password: ''
 }
 
@@ -18,15 +18,15 @@ class Login extends Component {
 
     inputHandler = (event) => {
         const { name, value } = event.target;
-        this.setState({ user: { ...this.state.user, [name]: value } });
+        this.setState({ user: { ...this.state.user, [name]: value }});
     }
 
     submitHandler = (event) => {
         event.preventDefault();
-        axios.post(`${url}/api/login`, this.state.user)
+        axios.post(`http://localhost:3333/api/users/login`, this.state.user)
             .then(response => {
                 if (response.status === 200 && response.data) {
-                    localStorage.setItem('secret_token', response.data);
+                    localStorage.setItem('secret_token', response.data.token);
                     this.props.history.push('/');
                 } else {
                     throw new Error();
@@ -44,12 +44,12 @@ class Login extends Component {
         return (
             <section>
                 <form onSubmit={this.submitHandler}>
-                    <label htmlFor='username'>Username</label>
+                    <label htmlFor='email'>Email</label>
                     <input
                         type='text'
-                        id='username'
-                        name='username'
-                        value={this.state.user.username}
+                        id='email'
+                        name='email'
+                        value={this.state.user.email}
                         onChange={this.inputHandler}
                     />
 
