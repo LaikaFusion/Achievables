@@ -12,7 +12,7 @@ const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = SECRET;
 
-const { users } = require("../routes");
+const { users, achievements, tasks } = require("../routes");
 
 module.exports = server => {
   server.use(cors());
@@ -22,10 +22,12 @@ module.exports = server => {
   server.use(logger("dev"));
   server.use(passport.initialize());
   server.use("/api/users", users);
+  server.use("/api/achievements", achievements);
+  server.use("/api/tasks", tasks);
   passport.use(
     new Strategy(opts, (jwt_payload, done) => {
       db("users")
-        .where(jwt_payload.id)
+        .where({ id: jwt_payload.id })
         .first()
         .then(user => (user ? done(null, user) : done(null, false)))
         .catch(err => console.error(err));
